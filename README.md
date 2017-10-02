@@ -1,11 +1,9 @@
 # simple-gcode-sender-P5
-comes with a gui!
-
-This is example code that i use in my digital fabrication course at KAIST.
+Comes with a gui! There are tons of good gcode senders. I'm very fond of [pronterface or printrun](http://www.pronterface.com), there are also great [processing](https://processing.org) libraries such as the text based [gctrl](https://github.com/damellis/gctrl). However, for my digital fabrication course at KAIST I needed something similar but dead simple with a gui to select the serial port and easy enough to hack some custom machines.
 
 # Installation
 
-First get and isntall processing https://processing.org
+First get and install processing https://processing.org
 
 Then, install the controlP5 gui library. Open processing, choose menu "sketch", "Import Library...", "Add Library...". Find the "controlP5" library and install.
 
