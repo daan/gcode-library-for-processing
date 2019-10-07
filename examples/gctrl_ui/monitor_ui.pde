@@ -8,8 +8,8 @@ Button gMonitorButton;
 
 
 void updateMonitorControls() {
-  if( m.hasNewReplies() > 0 ) {
-    int last = m.hasNewReplies();
+  if( m.hasNewReplies() ) {
+    int last = m.numNewReplies();
     StringList l = m.getReplies();
     for(int i= last; i < l.size(); i++) {
       gMonitorText = gMonitorText + "\n" + l.get(i);

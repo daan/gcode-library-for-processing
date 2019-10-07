@@ -1,16 +1,44 @@
-# simple-gcode-sender-P5
-Comes with a gui! There are tons of good gcode senders. I'm very fond of [pronterface or printrun](http://www.pronterface.com), there are also great [processing](https://processing.org) libraries such as the text based [gctrl](https://github.com/damellis/gctrl). However, for my digital fabrication course at KAIST I needed something similar but dead simple with a gui to select the serial port and easy enough to hack some custom machines.
+A library for dealing with gcodes in Processing Java. 
 
-# Installation
+With this library you can:
+* render PShapes to gcodes, very similar to the PDF, SVG DXF writers
+* parse and generate gcodes with a convienient class GCode
+* communicate with a CNC device over serial.
 
-First get and install processing https://processing.org
+Working with fabrication machines can be dangerous. Use this library at your own risk. 
 
-Then, install the controlP5 gui library. Open processing, choose menu "sketch", "Import Library...", "Add Library...". Find the "controlP5" library and install.
+Features:
+* Derived from PGraphics, all processing drawing should be supported.
+* Custom "pen up" and "pen down" gcodes for pen-plotters.
 
-# Run
+Limitations:
+* beziers don't work with transformation matrices.
+* SVG shape is not supported yet.
+* This library doesn't do slicing
+* This library ignores any fills, just outlines. 
 
-Open the "simple_gcode_sender_P5.pde" sketch. Select a serial port and connect to your machine. Currently tested with Marlin firmware.
 
-The default Baudrate is 250000, other rates you have to set in the source (line 7).
+Examples:
+
+```
+import gcode.*;
+
+GCodeGraphics ggraphics = new GCodeGraphics();
+
+setup() {
+  beginRecord(ggraphics);
+  ellipse(0,0,300,200);
+  endRecord();
+  print(ggraphics);
+}
+
+draw() {
+  background(255);
+  noFill();
+  GCode.visualize(this.g, ggraphics.getStringList());
+}
+````
+
+
 
 

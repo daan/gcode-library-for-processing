@@ -9,7 +9,7 @@ void enumeratePorts() {
     active = gPorts[int(gPortList.getValue())];
   }
   gPortList.clear(); 
-  gPorts = Serial.list();  
+  gPorts = Machine.enumeratePorts();  
   gPortList.setItems(gPorts);
   
   int v = gPorts.length-1; // initialize value as the last port in the list
@@ -34,7 +34,7 @@ void setupConnectionControls() {
     .align(ControlP5.CENTER, CENTER, CENTER, CENTER)
     ;    
   // port list    
-  gPorts = Serial.list();
+  gPorts = Machine.enumeratePorts();  
   gPortList = cp5.addScrollableList("dropdown")
     .setPosition(50, 10)
     .setSize(199, 100)

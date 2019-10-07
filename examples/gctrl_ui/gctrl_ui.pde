@@ -1,15 +1,10 @@
 import processing.serial.*;
+
+import gcode.*;
 import controlP5.*;
 
 Machine m;
 ControlP5 cp5;
-
-
-// this function gets called when a line is received on the serial
-// we trigger the machine.
-void serialEvent(Serial myPort) {
-    m.event(); 
-}
 
 void setup() {
   size(640,480);
