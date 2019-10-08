@@ -1,10 +1,10 @@
 
 public void endstops(int v) { 
-  m.schedule("M119");
+  m.send("M119");
 }
 
 public void servo(int v) {
-  m.schedule(GCode.servoPosition(1,100));
+  m.send(GCode.servoPosition(1,100));
 }
 
 public void homeXY(int v) {
@@ -12,10 +12,10 @@ public void homeXY(int v) {
 }
 
 public void go1(int v) {
-   m.schedule("G1 X150 Y150 F2000"); // gcode_move(100,150,2000) ); 
+   m.send("G1 X150 Y150 F2000"); // gcode_move(100,150,2000) ); 
 }
 public void go2(int v) {
-   m.schedule("G1 X50 Y350 F2000"); // gcode_move(100,150,2000) ); 
+   m.send("G1 X50 Y350 F2000"); // gcode_move(100,150,2000) ); 
 }
 
 void setupExampleControls() {

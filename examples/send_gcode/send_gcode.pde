@@ -24,6 +24,8 @@ void draw() {
   if ((millis() > timer) && (home == false)) {
     home = true;
     m.send("?"); // grbl status    
+    m.send("G0 X100");
+    
   }
   if (m.hasNewReplies() ) {
     StringList replies = m.getReplies();

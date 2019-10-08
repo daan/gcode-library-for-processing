@@ -3,8 +3,42 @@ String gMonitorText = new String();
 Textfield gMonitorInputText;
 Button gMonitorButton;
 
+float jogSpeed = 1; 
+
+public void distance(int v) { 
+  jogSpeed = ((float)v)/10.0;
+}
 
 
+public void xmin(int v) { 
+  if (m.isBusy()) return;  
+  m.schedule(new String[]{"G91","G21","G0 X-"+jogSpeed} );  
+}
+public void xplus(int v) { 
+  if (m.isBusy()) return;  
+
+  m.schedule(new String[]{"G91","G21","G0 X"+jogSpeed} );  
+}
+
+public void ymin(int v) { 
+  if (m.isBusy()) return;  
+
+  m.schedule(new String[]{"G91","G21","G0 Y-"+jogSpeed} );  
+}
+public void yplus(int v) { 
+  if (m.isBusy()) return;  
+
+  m.schedule(new String[]{"G91","G21","G0 Y"+jogSpeed} );  
+}
+
+public void zmin(int v) { 
+  if (m.isBusy()) return;  
+  m.schedule(new String[]{"G91","G21","G0 Z-"+jogSpeed} );  
+}
+public void zplus(int v) { 
+  if (m.isBusy()) return;  
+m.schedule(new String[]{"G91","G21","G0 Z"+jogSpeed} );  
+}
 
 
 void updateMonitorControls() {
@@ -34,30 +68,34 @@ void setupJogControls() {
     cp5.addButton("xmin")
      .setPosition(x-d,y)
      .setSize(40,20)
+     .setLabel("-x")
      ;
-    cp5.addButton("xmax")
+    cp5.addButton("xplus")
      .setPosition(x+d,y)
      .setSize(40,20)
+     .setLabel("+x")
      ;
 
-  cp5.addButton("ymax")
+  cp5.addButton("yplus")
      .setPosition(x,y-d)
      .setSize(40,20)
+     .setLabel("+y")
      ;
-
    cp5.addButton("ymin")
      .setPosition(x,y+d)
      .setSize(40,20)
+     .setLabel("-y")
      ;
 
-   cp5.addButton("zmax")
+   cp5.addButton("zplus")
      .setPosition(x+d*1.5,y-d)
      .setSize(40,20)
+     .setLabel("+z")
      ;
-
-   cp5.addButton("zmin")
+   cp5.addButton("zplus")
      .setPosition(x+d*1.5,y+d)
      .setSize(40,20)
+     .setLabel("-z")
      ;
     cp5.addSlider("distance")
     .setPosition(x-d,y+2*d)
@@ -93,13 +131,13 @@ void setupMonitorControls() {
 }
 
 public void inputText(String t) {
-   m.send(t);
+   m.schedule(t);
    println("send command" + t);
 }
 
 public void send(int v) {
    String t = gMonitorInputText.getText();
    if( t.length() != 0) {
-     m.send(t);
+     m.schedule(t);
    }
 }
