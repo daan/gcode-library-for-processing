@@ -114,10 +114,14 @@ void appendPenDown() {
  *
  */
 
-void setPenUpDown(StringList penUp, StringList penDown) {
+public void setPenUpDown(StringList penUp, StringList penDown) {
   penMode = true;
   penUpCommands = penUp;
   penDownCommands = penDown;  
+}
+
+public void setPenUpDown(GCodeList penUp, GCodeList penDown) {
+  setPenUpDown(penUp.toStringList(), penDown.toStringList());
 }
 
 //////////////////////////////////////////////////////////////
