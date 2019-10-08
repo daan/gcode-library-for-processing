@@ -12,7 +12,8 @@ import processing.serial.*;
 
 public class Machine {
   Serial mSerial;
-  boolean mWaiting;
+  boolean mWaiting = true;
+  boolean mBooted = false;
   int mBaud = 115200; // 250000;
   
   boolean mLog = true;
@@ -109,10 +110,7 @@ public class Machine {
       System.out.println("not connected.... not scheduling");
       return false;
     }
-    // how to concat two stringlists....
-    for(int i=0; i< commands.size(); i++) {
-      mNewCommands.append(commands.get(i));
-    }
+    mNewCommands.append(commands);
     return true;
   }
   public boolean schedule(String s) {
@@ -133,6 +131,16 @@ public class Machine {
     return true;
   }
 
+  public boolean schedule(GCodeGraphics g) {
+    if( mSerial == null) {
+      System.out.println("not connected.... not scheduling");
+      return false;
+    }
+    StringList s = g.getStringList();
+    // how to concat two stringlists....
+    mNewCommands.append(s);
+    return true;
+  }
   
   public boolean hasNext() {    
     if (0 != mNewCommands.size()) return true;
@@ -188,14 +196,24 @@ public class Machine {
     } else {
       System.out.println(ret); 
     }
+    
+    if (! mBooted ) {
+      String machineId = ret.substring(0,4);
+      if (machineId.equals("Grbl") ) {
+        mBooted = true;
+        mWaiting = false;
+      }
+    }
     if( ret.equals("ok") ) {
        mWaiting = false;
        // if we have scheduled commands do them first
-       if( mNewCommands.size() != 0 ) {
-         if ( send(mNewCommands.get(0)) ) {
-           mNewCommands.remove(0);
-         }
-       }
+    }
+    if(mWaiting==false) {
+      if( mNewCommands.size() != 0 ) {
+        if ( send(mNewCommands.get(0)) ) {
+          mNewCommands.remove(0);
+        }
+      }
     }
   }  
   

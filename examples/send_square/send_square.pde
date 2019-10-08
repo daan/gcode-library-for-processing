@@ -18,19 +18,21 @@ void setup() {
     // m.connect(this, "/dev/tty.usbmodem1421"); // use on macOS 
     // m.connect(this, "COM6");  // use on Windows
     
-    m.schedule("G91");
-    m.schedule("G1 F200 X10");
-    m.schedule("G1 Y10");
-    m.schedule("G1 Z10");
+    GCodeGraphics ggraphics = new GCodeGraphics();
     
-    m.schedule("G1 X10 Y10 Z10");
+    beginRecord(ggraphics);
+    rect(0,0,10,10);
+    // ellipse(50,50,30,30);
+    endRecord();
     
+    // print(ggraphics);
+
+    m.schedule("G90"); // absolute mode
+    m.schedule("G1 F200"); // feedrate 200
+    m.schedule(ggraphics);
 }
 
-
 void draw() {
-
-  
   if (m.hasNewReplies() ) {
     StringList replies = m.getReplies();
     for(int i=0; i < replies.size(); i++) {
