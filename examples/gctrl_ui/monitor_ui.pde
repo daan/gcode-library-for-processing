@@ -92,7 +92,7 @@ void setupJogControls() {
      .setSize(40,20)
      .setLabel("+z")
      ;
-   cp5.addButton("zplus")
+   cp5.addButton("zmin")
      .setPosition(x+d*1.5,y+d)
      .setSize(40,20)
      .setLabel("-z")

@@ -17,19 +17,31 @@ void setup() {
     
     // m.connect(this, "/dev/tty.usbmodem1421"); // use on macOS 
     // m.connect(this, "COM6");  // use on Windows
-    
-    GCodeGraphics ggraphics = new GCodeGraphics();
-    
-    beginRecord(ggraphics);
-    rect(0,0,10,10);
-    // ellipse(50,50,30,30);
-    endRecord();
-    
-    // print(ggraphics);
 
-    m.schedule("G90"); // absolute mode
+    GCodeList gcodes = new GCodeList();
+
+  float cx = 50;
+  float cy = 50;
+  float r = 20;
+  float z = 0;
+  for(int turns=0; turns < 10; turns++) {
+    for(int a=0; a < 360; a++) {
+      float x = cx + r * (float)Math.cos(a/360.0 * TWO_PI);
+      float y = cy + r * (float)Math.sin(a/360.0 * TWO_PI);
+      if ( (a==0) && (turns==0) ) {
+        gcodes.append( GCode.G0(x,y,z) ); 
+      } else {
+        gcodes.append( GCode.G1(x,y,z) );
+      }        
+      z+= 0.05;
+    }
+  }
+    
+    m.schedule("G90"); // absolute
+    m.schedule("G21"); // mm
+    
     m.schedule("G1 F200"); // feedrate 200
-    m.schedule(ggraphics);
+    m.schedule(gcodes.toStringArray() );
 }
 
 void draw() {

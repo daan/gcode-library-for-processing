@@ -3,7 +3,7 @@ import processing.serial.*;
 import gcode.*;
 import controlP5.*;
 
-Machine m;
+Machine m = new Machine();  
 ControlP5 cp5;
 
 void setup() {
@@ -14,8 +14,7 @@ void setup() {
   setupConnectionControls();
   setupExampleControls();
 
-  m = new Machine();  
-// m.connect(this, "/dev/tty.usbmodem1451", 250000);
+  // m.connect(this, "/dev/tty.usbmodem1451", 250000);
   
 }
 
@@ -23,6 +22,9 @@ void setup() {
 
 
 void draw() {
+  if (m.isConnected()) {  
+    m.poll();
+  }
   background(0);
   updateConnectionStatus();
   updateMonitorControls();

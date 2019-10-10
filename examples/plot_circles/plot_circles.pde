@@ -26,23 +26,26 @@ void setup() {
     ggraphics.setPenUpDown(new StringList( "M3 S0"), new StringList( "M3 S255"));
     
     
-    beginRecord(ggraphics);
-    rect(50,50,10,10);
-    rect(25,25,10,10);
+    beginRecord(ggraphics); 
+    //rect(50,50,10,10);
+    //rect(25,25,10,10);
     
-    // ellipse(50,50,30,30);
+    
+    ellipse(50,50,10,10);
+    ellipse(25,25,10,10);
+    
     endRecord();
     
     print(ggraphics);
 
     m.home();
-    
-    m.schedule("G90"); // absolute mode
     m.schedule("G1 F200"); // feedrate 200
     m.schedule(ggraphics);
 }
 
 void draw() {
+  
+  // print the replies of the machine in the terminal.
   if (m.hasNewReplies() ) {
     StringList replies = m.getReplies();
     for(int i=0; i < replies.size(); i++) {

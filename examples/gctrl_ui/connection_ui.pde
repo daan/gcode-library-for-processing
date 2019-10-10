@@ -76,6 +76,7 @@ public void connect(int v) {
   } else {
     gConnectedToggle.setCaptionLabel("disconnect");
     int selected = int(gPortList.getValue()); 
+    print("connect to " + gPorts[selected]);
     m.connect( this, gPorts[selected]);
   }
 }
