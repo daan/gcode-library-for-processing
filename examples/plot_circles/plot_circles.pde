@@ -11,6 +11,7 @@ void setup() {
     
     // make a machine
     m = new Machine();
+    
 
     // connect using the "last" serial port and 112k500 baudrate.
     m.connect(this);     
@@ -22,18 +23,20 @@ void setup() {
     
     // set the pen up pen down
     // https://github.com/DWiskow/grbl1-1g-Servo
-    ggraphics.setPenUpDown(new StringList( "M5"), new StringList( "M3 S255"));
+    ggraphics.setPenUpDown(new StringList( "M3 S0"), new StringList( "M3 S255"));
     
     
     beginRecord(ggraphics);
-    rect(0,0,10,10);
-    rect(5,5,10,10);
+    rect(50,50,10,10);
+    rect(25,25,10,10);
     
     // ellipse(50,50,30,30);
     endRecord();
     
     print(ggraphics);
 
+    m.home();
+    
     m.schedule("G90"); // absolute mode
     m.schedule("G1 F200"); // feedrate 200
     m.schedule(ggraphics);

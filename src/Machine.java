@@ -185,6 +185,11 @@ public class Machine {
     return true;
   }
   
+  // FIXME: grbl specific
+  public void home() {
+    schedule("$H");
+  }
+
   public void poll() {
     if( mSerial == null) return;
     if( 0 == mSerial.available() ) return;

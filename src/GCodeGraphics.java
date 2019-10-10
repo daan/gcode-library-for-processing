@@ -55,6 +55,10 @@ public GCodeGraphics(){
       this.transformMatrix = new PMatrix3D();
       matricesAllocated = true;
      }
+
+     // metric, absolute.
+     gcodes.append("G90");
+     gcodes.append("G21");
 }
 
 
@@ -196,9 +200,6 @@ public void setPenUpDown(GCodeList penUp, GCodeList penDown) {
 public void beginShape(int kind) {
     first = null;
     shape = kind;
-    if(penMode == true) {
-      appendPenDown();
-    }
 }
 
 @Override 
@@ -252,6 +253,9 @@ public void vertex(float x, float y, float z) {
     firstIs2D = false;
     first = pt;
     appendG0(pt.x,pt.y,pt.z);
+    if(penMode == true) {
+      appendPenDown();
+    }
   } else {
     appendG1(pt.x,pt.y,pt.z);
   }
