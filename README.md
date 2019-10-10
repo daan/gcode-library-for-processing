@@ -12,17 +12,15 @@ Features:
 * Custom "pen up" and "pen down" gcodes for pen-plotters.
 
 Limitations:
-* beziers don't work with transformation matrices.
+* Beziers don't work yet with transformation matrices.
 * SVG shape is not supported yet.
 * This library doesn't do slicing
 * This library ignores any fills, just outlines. 
+* the machine is mostly tested with GRBL. Homing and so on for Marlin and others need to be implemented.
 
 ## install ##
 
 Download the zip or clone the the archive into your processing library folder. Rename it to "gcode".
-
-
-
 
 ## Examples ##
 
