@@ -17,8 +17,14 @@ Limitations:
 * This library doesn't do slicing
 * This library ignores any fills, just outlines. 
 
+## install ##
 
-Examples:
+Download the zip or clone the the archive into your processing library folder. Rename it to "gcode".
+
+
+
+
+## Examples ##
 
 ```
 import gcode.*;
@@ -38,6 +44,41 @@ draw() {
   GCode.visualize(this.g, ggraphics.getStringList());
 }
 ````
+
+```
+import processing.serial.*;
+import gcode.*;
+
+Machine m = new Machine();
+GCodeGraphics ggraphics = new GCodeGraphics();
+
+setup() {
+  m.connect(this);
+  
+  GCodeGraphics ggraphics = new GCodeGraphics();
+  ggraphics.setPenUpDown(new StringList( "M3 S0"), new StringList( "M3 S255"));
+  
+  beginRecord(ggraphics); 
+    ellipse(50,50,10,10);
+    ellipse(25,25,10,10);
+  endRecord();
+  
+  m.home();
+  m.schedule("G1 F200"); // feedrate 200
+  m.schedule(ggraphics);
+}
+
+draw() {
+if (m.hasNewReplies() ) {
+    StringList replies = m.getReplies();
+    for(int i=0; i < replies.size(); i++) {
+      println(replies.get(i) );
+    }
+  }
+}
+````
+
+
 
 
 
