@@ -17,18 +17,25 @@ public class Machine {
   int mBaud = 115200; // 250000;
   
   boolean mLog = true;
-  
-  StringList mReplies;
-  StringList mExecutedCommands;
-  StringList mNewCommands;
+
+  private StringList mNewReplies= new StringList();; // not yet processed;  
+  StringList mReplies = new StringList();
+  StringList mExecutedCommands= new StringList();;
+  StringList mNewCommands= new StringList();;
   
   int lf = 10; // ASCII linefeed
   int cr = 13; // Carriage Return
 
+  enum Firmware {
+    OTHER,
+    MARLIN,
+    GRBL
+  }
+
+  Firmware mFirmware = Firmware.OTHER;
+
+
   public Machine() {
-    mReplies = new StringList();
-    mExecutedCommands = new StringList();
-    mNewCommands = new StringList();
   }
 
   public boolean hasNewReplies() {
@@ -62,7 +69,7 @@ public class Machine {
   }
 
   public boolean isBusy() {
-    return ! mWaiting;
+    return mWaiting;
   }
   
   public boolean isWaiting() {
@@ -77,7 +84,6 @@ public class Machine {
   
   public void connect(PApplet a, String port) {
     mSerial = new Serial(a, port, mBaud); // "/dev/tty.usbmodem1451", 250000);
-    mSerial.bufferUntil(lf);
     mWaiting = false;
     a.registerMethod("pre", this);
   }
@@ -92,6 +98,7 @@ public class Machine {
     mSerial.clear();
     mSerial.stop();
     mSerial = null;
+    // FIXME:: deregister pre method
   }
   
   public boolean schedule(String[] commands) {
@@ -185,16 +192,52 @@ public class Machine {
     return true;
   }
   
-  // FIXME: grbl specific
   public void home() {
-    schedule("$H");
+    if (mFirmware == Firmware.GRBL) {
+      schedule("$H");
+    } else {
+      schedule("G28");
+    }
+  }
+
+
+  // serial character fetch routine. Buffer until, readLine was not consistent over multiple
+  // firmwares. This function retrieves a line, trims it and
+  String mFromMachine = "";
+  void readSerial() {
+    while (mSerial.available() > 0) {    
+      char inByte = mSerial.readChar();
+      if ( (inByte == 10) || (inByte == 13) ) {      
+        mFromMachine = mFromMachine.replaceAll("[\\n\\t ]", "").trim();  // cleanup.
+        if (mFromMachine.length() != 0) { 
+          mNewReplies.append(mFromMachine);
+          mFromMachine = "";
+        }
+      } else {
+        mFromMachine += inByte;
+      }
+    }
   }
 
   public void poll() {
-    if( mSerial == null) return;
-    if( 0 == mSerial.available() ) return;
-    // since we use bufferUntil linefeed  we should get a line.
-    String ret = mSerial.readString().trim();
+
+    // first send commands if available
+
+    if(mWaiting==false) {
+      if( mNewCommands.size() != 0 ) {
+        
+        if ( send(mNewCommands.get(0)) ) {
+          mNewCommands.remove(0);
+        }
+      }
+    }
+
+    // get replies from machine
+
+    readSerial();
+    if (mNewReplies.size() == 0) return;
+    String ret = mNewReplies.get(0);
+    mNewReplies.remove(0);
     
     if(mLog) {
       mReplies.append(ret);
@@ -202,24 +245,35 @@ public class Machine {
       System.out.println(ret); 
     }
     
+    // figure out firmware
     if (! mBooted ) {
-      String machineId = ret.substring(0,4);
-      if (machineId.equals("Grbl") ) {
+      if (ret.substring(0,4).equals("Grbl") ) {
+        System.out.println("grbl firmware detected");
+        mFirmware = Firmware.GRBL;
         mBooted = true;
         mWaiting = false;
       }
+      if ( ret.length() > 10) {
+        if (ret.substring(0,11).equals("echo:Marlin")) {
+          System.out.println("marlin firmware detected");
+
+          mFirmware = Firmware.MARLIN;
+          mBooted = true;
+          mWaiting = false;
+        } 
+      }
     }
+    if (ret.length() > 5) {
+      if( ret.substring(0,5).equals("echo:")) {
+        System.out.println("ignore echo");
+      }
+    }
+    
     if( ret.equals("ok") ) {
        mWaiting = false;
        // if we have scheduled commands do them first
     }
-    if(mWaiting==false) {
-      if( mNewCommands.size() != 0 ) {
-        if ( send(mNewCommands.get(0)) ) {
-          mNewCommands.remove(0);
-        }
-      }
-    }
+
   }  
   
   public void pre() {

@@ -38,7 +38,7 @@ void setup() {
     
     print(ggraphics);
 
-    m.home();
+    //m.home();
     m.schedule("G1 F200"); // feedrate 200
     m.schedule(ggraphics);
 }
