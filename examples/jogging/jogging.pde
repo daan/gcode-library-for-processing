@@ -19,37 +19,35 @@ public void home(int v) {
   m.home();  
 }
 
-public void xmin(int v) { 
+void xmin(int v) { 
   if (m.isBusy()) return;  
   m.schedule(new String[]{"G91","G21","G0 X-"+jogSpeed} );  
 }
-public void xplus(int v) { 
+void xplus(int v) { 
   if (m.isBusy()) return;  
 
   m.schedule(new String[]{"G91","G21","G0 X"+jogSpeed} );  
 }
 
-public void ymin(int v) { 
+void ymin(int v) { 
   if (m.isBusy()) return;  
 
   m.schedule(new String[]{"G91","G21","G0 Y-"+jogSpeed} );  
 }
-public void yplus(int v) { 
+void yplus(int v) { 
   if (m.isBusy()) return;  
 
   m.schedule(new String[]{"G91","G21","G0 Y"+jogSpeed} );  
 }
 
-public void zmin(int v) { 
+void zmin(int v) { 
   if (m.isBusy()) return;  
   m.schedule(new String[]{"G91","G21","G0 Z-"+jogSpeed} );  
 }
-public void zplus(int v) { 
+void zplus(int v) { 
   if (m.isBusy()) return;  
 m.schedule(new String[]{"G91","G21","G0 Z"+jogSpeed} );  
 }
-
-
 
 void setupJogControls() {
     

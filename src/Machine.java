@@ -83,6 +83,7 @@ public class Machine {
   }
   
   public void connect(PApplet a, String port) {
+    System.out.println("connect to "+port+" with " +mBaud + " baud");
     mSerial = new Serial(a, port, mBaud); // "/dev/tty.usbmodem1451", 250000);
     mWaiting = false;
     a.registerMethod("pre", this);
@@ -268,7 +269,7 @@ public class Machine {
         System.out.println("ignore echo");
       }
     }
-    
+
     if( ret.equals("ok") ) {
        mWaiting = false;
        // if we have scheduled commands do them first
